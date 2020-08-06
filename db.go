@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 	"unsafe"
+	"github.com/sasha-s/go-deadlock"
 )
 
 // The largest step that can be taken when remapping the mmap.
@@ -143,7 +144,7 @@ type DB struct {
 	batchMu sync.Mutex
 	batch   *batch
 
-	rwlock   sync.Mutex   // Allows only one writer at a time.
+	rwlock   deadlock.Mutex   // Allows only one writer at a time.
 	metalock sync.Mutex   // Protects meta page access.
 	mmaplock sync.RWMutex // Protects mmap access during remapping.
 	statlock sync.RWMutex // Protects stats access.
